@@ -1,55 +1,22 @@
 import { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  ComposedChart,
+  Line,
+  Area,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Scatter,
+  ResponsiveContainer,
+} from 'recharts';
 import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
 import 'rsuite-table/dist/css/rsuite-table.css';
 import './App.css';
 
 import dataGenerator from './data';
-
-const chartData = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
 
 const WalletCell = ({ rowData, ...props }) => (
   <Cell {...props}>
@@ -70,12 +37,30 @@ const Card = ({ title, value }) => (
   </div>
 );
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    const [real, expected] = payload;
+
+    return (
+      <div className="tp-card">
+        <p className="tp-label">{label}</p>
+        <p className="tp-data tp-real">{`${real.name}: ${real.value}`}</p>
+        <p className="tp-data tp-expected">{`${expected.name}: ${expected.value}`}</p>
+        <p className="tp-total">{`O total de NTFs deste tipo é ${real?.payload?.total?.toLocaleString('pt')}.`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 function App() {
   const [data, setData] = useState({});
   const [nftQuantity, setNFTQuantity] = useState([]);
   const [lfQuantity, setLFQuantity] = useState([]);
   const [fiveStars, setFiveStars] = useState([]);
   const [fourStars, setFourStars] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     const newData = dataGenerator();
@@ -102,6 +87,39 @@ function App() {
         .slice(0, 10)
         .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.fourStar }))
     );
+
+    setChartData([
+      {
+        name: 'Beginer (1*)',
+        total: newData?.totalNFTByRarity?.oneStar || 0,
+        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.oneStar / newData.numberOfNFTs) * 100).toFixed(2)),
+        'Porcentagem de Mint Esperada': 51
+      },
+      {
+        name: 'Intermediate (2*)',
+        total: newData?.totalNFTByRarity?.twoStars || 0,
+        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.twoStars / newData.numberOfNFTs) * 100).toFixed(2)),
+        'Porcentagem de Mint Esperada': 30
+      },
+      {
+        name: 'Advanced (3*)',
+        total: newData?.totalNFTByRarity?.threeStars || 0,
+        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.threeStars / newData.numberOfNFTs) * 100).toFixed(2)),
+        'Porcentagem de Mint Esperada': 15
+      },
+      {
+        name: 'Rare (4*)',
+        total: newData?.totalNFTByRarity?.fourStars || 0,
+        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.fourStars / newData.numberOfNFTs) * 100).toFixed(2)),
+        'Porcentagem de Mint Esperada': 3
+      },
+      {
+        name: 'Legendary (5*)',
+        total: newData?.totalNFTByRarity?.fiveStars || 0,
+        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.fiveStars / newData.numberOfNFTs) * 100).toFixed(2)),
+        'Porcentagem de Mint Esperada': 1
+      },
+    ])
   }, []);
 
   return (
@@ -120,25 +138,25 @@ function App() {
 
         <div style={{ width: 1200, height: 400 }}>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
+            <ComposedChart
               width={500}
-              height={300}
+              height={400}
               data={chartData}
               margin={{
-                top: 5,
-                right: 30,
+                top: 20,
+                right: 20,
+                bottom: 20,
                 left: 20,
-                bottom: 5,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <CartesianGrid stroke="#f5f5f5" />
+              <XAxis dataKey="name" scale="band" />
               <YAxis />
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
-              <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-            </LineChart>
+              <Bar barSize={40} dataKey="Porcentagem de Mint Real" fill="#8884d8" />
+              <Bar barSize={40} dataKey="Porcentagem de Mint Esperada" fill="#82ca9d" />
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>
