@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react';
 import {
   ComposedChart,
-  Line,
-  Area,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  Scatter,
   ResponsiveContainer,
 } from 'recharts';
 import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
+import { isMobile } from 'react-device-detect';
 import 'rsuite-table/dist/css/rsuite-table.css';
 import './App.css';
 
@@ -136,7 +134,7 @@ function App() {
       <div className="card full-width bottom-margin">
         <h2 className="title">NFTs Mintados por raridade</h2>
 
-        <div style={{ width: 1200, height: 400 }}>
+        <div className="chart">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               width={500}
@@ -164,13 +162,13 @@ function App() {
       <div className="section bottom-margin">
         <div className="card right-margin">
           <h2>Top 50 Carteiras por número de NFTs</h2>
-          <Table data={nftQuantity} width={584} height={400} hover={false}>
+          <Table data={nftQuantity} width={isMobile ? '100%' : 584} height={400} hover={false} virtualized>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={354} fixed resizable>
+            <Column width={354} resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
@@ -184,13 +182,13 @@ function App() {
 
         <div className="card">
           <h2>Top 50 Carteiras por LF minado</h2>
-          <Table data={lfQuantity} width={584} height={400} hover={false}>
+          <Table data={lfQuantity} width={isMobile ? '100%' : 584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={354} fixed resizable>
+            <Column width={354} resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
@@ -207,13 +205,13 @@ function App() {
       <div className="section bottom-margin">
         <div className="card right-margin">
           <h2>Top 10 Carteiras por Mineiros Lendários</h2>
-          <Table data={fiveStars} width={584} height={400} hover={false}>
+          <Table data={fiveStars} width={isMobile ? '100%' : 584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={354} fixed resizable>
+            <Column width={354} resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
@@ -227,13 +225,13 @@ function App() {
 
         <div className="card">
           <h2>Top 10 Carteiras por Mineiros Raros</h2>
-          <Table data={fourStars} width={584} height={400} hover={false}>
+          <Table data={fourStars} width={isMobile ? '100%' : 584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={354} fixed resizable>
+            <Column width={354} resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
