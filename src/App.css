@@ -1,0 +1,127 @@
+h2 {
+    margin: 0;
+}
+
+p {
+    margin-top: 8px;
+}
+
+a {
+    text-decoration: none;
+    color: #949ba2;
+}
+
+a:visited {
+    color: #f8f9fa;
+}
+
+body {
+    background-color: #33353e;
+    color: #f8f9fa;
+
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.section {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cards {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 1200px;
+    margin-bottom: 16px;
+}
+
+.card {
+    background-color: #3b3e46;
+
+    border-radius: 6px;
+
+    margin-right: 16px;
+    padding: 16px;
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    justify-content: center;
+
+    -webkit-box-shadow: 0px 10px 10px -4px rgba(0,0,0,0.6);
+    box-shadow: 0px 10px 10px -4px rgba(0,0,0,0.6);
+}
+
+.card:last-child {
+    margin-right: 0;
+}
+
+.card > p {
+    font-size: 14px;
+    color: #8c939a;
+}
+
+.card > h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.title {
+    margin-bottom: 16px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.full-width {
+    width: 1200px;
+}
+
+.bottom-margin {
+    margin-bottom: 32px;
+}
+
+.right-margin {
+    margin-right: 32px;
+}
+
+.rs-table {
+    background-color: #3a3d45;
+    border: 1px solid #3a3d45;
+}
+
+.rs-table-row {
+    background-color: #3a3d45;
+    border-bottom: 1px solid #484c5a;
+}
+
+.rs-table-row-header {
+    background-color: #3a3d45;
+}
+
+.rs-table-cell {
+    background-color: transparent;
+    border-color: #3a3d45;
+}
+
+.rs-table-row-header .rs-table-cell {
+    background-color: transparent;
+}
+
+.rs-table-cell-header {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.rs-table-cell-content {
+    font-size: 14px;
+    color: #949ba2;
+}

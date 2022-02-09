@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
 import 'rsuite-table/dist/css/rsuite-table.css';
+import './App.css';
 
 import dataGenerator from './data';
 
@@ -63,9 +64,9 @@ const LFCell = ({ rowData, ...props }) => (
 );
 
 const Card = ({ title, value }) => (
-  <div style={{ borderWidth: 1, borderColor: '#000000', borderRadius: 8, borderStyle: 'solid', marginRight: 16, padding: 16, display: 'flex', flex: 1, flexDirection: 'column' }}>
-    <h2 style={{ margin: 0 }}>{value}</h2>
-    <p style={{ margin: 0, marginTop: 8 }}>{title}</p>
+  <div className="card">
+    <h2>{value}</h2>
+    <p>{title}</p>
   </div>
 );
 
@@ -107,15 +108,15 @@ function App() {
     <div style={{ width: '100%', height: '100%', flex: 1, display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: 40 }}>
       <h1>ELEF Dashboard</h1>
 
-      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: 1200 }}>
-        <Card title="Número de Jogadores" value={data.numberOfPlayers} />
-        <Card title="Número de NFTs" value={data.numberOfNFTs} />
-        <Card title="Jogadores com 10+ NFTs" value={data.numberOfFullLandWallets} />
+      <div className="cards">
+        <Card title="Número de Jogadores" value={data.numberOfPlayers?.toLocaleString('pt')} />
+        <Card title="Número de NFTs" value={data.numberOfNFTs?.toLocaleString('pt')} />
+        <Card title="Jogadores com 10+ NFTs" value={data.numberOfFullLandWallets?.toLocaleString('pt')} />
         <Card title="Total de LF minado" value={`${data.totalMinedLF?.toLocaleString('pt')} LF`} />
       </div>
 
-      <div style={{ width: 1200 }}>
-        <h2>NFTs Mintados por raridade</h2>
+      <div className="card full-width bottom-margin">
+        <h2 className="title">NFTs Mintados por raridade</h2>
 
         <div style={{ width: 1200, height: 400 }}>
           <ResponsiveContainer width="100%" height="100%">
@@ -142,16 +143,16 @@ function App() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ marginRight: 32 }}>
+      <div className="section bottom-margin">
+        <div className="card right-margin">
           <h2>Top 50 Carteiras por número de NFTs</h2>
-          <Table data={nftQuantity} width={650} height={400}>
+          <Table data={nftQuantity} width={584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={430} fixed resizable>
+            <Column width={354} fixed resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
@@ -163,15 +164,15 @@ function App() {
           </Table>
         </div>
 
-        <div>
+        <div className="card">
           <h2>Top 50 Carteiras por LF minado</h2>
-          <Table data={lfQuantity} width={650} height={400}>
+          <Table data={lfQuantity} width={584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={420} fixed resizable>
+            <Column width={354} fixed resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
@@ -185,16 +186,16 @@ function App() {
       </div>
 
 
-      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ marginRight: 32 }}>
+      <div className="section bottom-margin">
+        <div className="card right-margin">
           <h2>Top 10 Carteiras por Mineiros Lendários</h2>
-          <Table data={fiveStars} width={650} height={400}>
+          <Table data={fiveStars} width={584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={420} fixed resizable>
+            <Column width={354} fixed resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
@@ -206,15 +207,15 @@ function App() {
           </Table>
         </div>
 
-        <div>
+        <div className="card">
           <h2>Top 10 Carteiras por Mineiros Raros</h2>
-          <Table data={fourStars} width={650} height={400}>
+          <Table data={fourStars} width={584} height={400} hover={false}>
             <Column width={70} resizable>
               <HeaderCell>Rank</HeaderCell>
               <Cell dataKey="id" />
             </Column>
 
-            <Column width={420} fixed resizable>
+            <Column width={354} fixed resizable>
               <HeaderCell>Carteira</HeaderCell>
               <WalletCell />
             </Column>
