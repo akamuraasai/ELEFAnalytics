@@ -58,8 +58,15 @@ const WalletCell = ({ rowData, ...props }) => (
 
 const LFCell = ({ rowData, ...props }) => (
   <Cell {...props}>
-    <div>{rowData.totalMined.toLocaleString('pt')} LF</div>
+    <div>{rowData.totalMined?.toLocaleString('pt')} LF</div>
   </Cell>
+);
+
+const Card = ({ title, value }) => (
+  <div style={{ borderWidth: 1, borderColor: '#000000', borderRadius: 8, borderStyle: 'solid', marginRight: 16, padding: 16, display: 'flex', flex: 1, flexDirection: 'column' }}>
+    <h2 style={{ margin: 0 }}>{value}</h2>
+    <p style={{ margin: 0, marginTop: 8 }}>{title}</p>
+  </div>
 );
 
 function App() {
@@ -97,130 +104,128 @@ function App() {
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%', flex: 1, display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: 40 }}>
       <h1>ELEF Dashboard</h1>
 
-      <div>
-        <h2>Número de jogadores</h2>
-        <p>{data.numberOfPlayers}</p>
+      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: 1200 }}>
+        <Card title="Número de Jogadores" value={data.numberOfPlayers} />
+        <Card title="Número de NFTs" value={data.numberOfNFTs} />
+        <Card title="Jogadores com 10+ NFTs" value={data.numberOfFullLandWallets} />
+        <Card title="Total de LF minado" value={`${data.totalMinedLF?.toLocaleString('pt')} LF`} />
       </div>
 
-      <div>
-        <h2>Número de NFTs</h2>
-        <p>{data.numberOfNFTs}</p>
+      <div style={{ width: 1200 }}>
+        <h2>NFTs Mintados por raridade</h2>
+
+        <div style={{ width: 1200, height: 400 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              width={500}
+              height={300}
+              data={chartData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
-      <div>
-        <h2>Número de jogadores com 10 NFTs ou mais</h2>
-        <p>{data.numberOfFullLandWallets}</p>
+      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ marginRight: 32 }}>
+          <h2>Top 50 Carteiras por número de NFTs</h2>
+          <Table data={nftQuantity} width={650} height={400}>
+            <Column width={70} resizable>
+              <HeaderCell>Rank</HeaderCell>
+              <Cell dataKey="id" />
+            </Column>
+
+            <Column width={430} fixed resizable>
+              <HeaderCell>Carteira</HeaderCell>
+              <WalletCell />
+            </Column>
+
+            <Column width={150} resizable>
+              <HeaderCell>Número de NFTs</HeaderCell>
+              <Cell dataKey="miners" />
+            </Column>
+          </Table>
+        </div>
+
+        <div>
+          <h2>Top 50 Carteiras por LF minado</h2>
+          <Table data={lfQuantity} width={650} height={400}>
+            <Column width={70} resizable>
+              <HeaderCell>Rank</HeaderCell>
+              <Cell dataKey="id" />
+            </Column>
+
+            <Column width={420} fixed resizable>
+              <HeaderCell>Carteira</HeaderCell>
+              <WalletCell />
+            </Column>
+
+            <Column width={160} resizable>
+              <HeaderCell>Quantidade Minada</HeaderCell>
+              <LFCell />
+            </Column>
+          </Table>
+        </div>
       </div>
 
-      <div>
-        <h2>Total de LF minado</h2>
-        <p>{data.totalMinedLF} LF</p>
+
+      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ marginRight: 32 }}>
+          <h2>Top 10 Carteiras por Mineiros Lendários</h2>
+          <Table data={fiveStars} width={650} height={400}>
+            <Column width={70} resizable>
+              <HeaderCell>Rank</HeaderCell>
+              <Cell dataKey="id" />
+            </Column>
+
+            <Column width={420} fixed resizable>
+              <HeaderCell>Carteira</HeaderCell>
+              <WalletCell />
+            </Column>
+
+            <Column width={160} resizable>
+              <HeaderCell>Número de NFTs</HeaderCell>
+              <Cell dataKey="miners" />
+            </Column>
+          </Table>
+        </div>
+
+        <div>
+          <h2>Top 10 Carteiras por Mineiros Raros</h2>
+          <Table data={fourStars} width={650} height={400}>
+            <Column width={70} resizable>
+              <HeaderCell>Rank</HeaderCell>
+              <Cell dataKey="id" />
+            </Column>
+
+            <Column width={420} fixed resizable>
+              <HeaderCell>Carteira</HeaderCell>
+              <WalletCell />
+            </Column>
+
+            <Column width={160} resizable>
+              <HeaderCell>Número de NFTs</HeaderCell>
+              <Cell dataKey="miners" />
+            </Column>
+          </Table>
+        </div>
       </div>
-
-      <div>
-        <h2>Top 50 Carteiras por número de NFTs</h2>
-        <Table data={nftQuantity} width={650} height={400}>
-          <Column width={70} resizable>
-            <HeaderCell>Rank</HeaderCell>
-            <Cell dataKey="id" />
-          </Column>
-
-          <Column width={430} fixed resizable>
-            <HeaderCell>Carteira</HeaderCell>
-            <WalletCell />
-          </Column>
-
-          <Column width={150} resizable>
-            <HeaderCell>Número de NFTs</HeaderCell>
-            <Cell dataKey="miners" />
-          </Column>
-        </Table>
-      </div>
-
-      <div>
-        <h2>Top 50 Carteiras por LF minado</h2>
-        <Table data={lfQuantity} width={650} height={400}>
-          <Column width={70} resizable>
-            <HeaderCell>Rank</HeaderCell>
-            <Cell dataKey="id" />
-          </Column>
-
-          <Column width={420} fixed resizable>
-            <HeaderCell>Carteira</HeaderCell>
-            <WalletCell />
-          </Column>
-
-          <Column width={160} resizable>
-            <HeaderCell>Quantidade Minada</HeaderCell>
-            <LFCell />
-          </Column>
-        </Table>
-      </div>
-
-      <div>
-        <h2>Top 10 Carteiras por Mineiros Lendários</h2>
-        <Table data={fiveStars} width={650} height={400}>
-          <Column width={70} resizable>
-            <HeaderCell>Rank</HeaderCell>
-            <Cell dataKey="id" />
-          </Column>
-
-          <Column width={420} fixed resizable>
-            <HeaderCell>Carteira</HeaderCell>
-            <WalletCell />
-          </Column>
-
-          <Column width={160} resizable>
-            <HeaderCell>Número de NFTs</HeaderCell>
-            <Cell dataKey="miners" />
-          </Column>
-        </Table>
-      </div>
-
-      <div>
-        <h2>Top 10 Carteiras por Mineiros Raros</h2>
-        <Table data={fourStars} width={650} height={400}>
-          <Column width={70} resizable>
-            <HeaderCell>Rank</HeaderCell>
-            <Cell dataKey="id" />
-          </Column>
-
-          <Column width={420} fixed resizable>
-            <HeaderCell>Carteira</HeaderCell>
-            <WalletCell />
-          </Column>
-
-          <Column width={160} resizable>
-            <HeaderCell>Número de NFTs</HeaderCell>
-            <Cell dataKey="miners" />
-          </Column>
-        </Table>
-      </div>
-
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          width={500}
-          height={300}
-          data={chartData}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        </LineChart>
-      </ResponsiveContainer>
     </div>
   );
 }
