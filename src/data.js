@@ -1,6 +1,3 @@
-import data from './data.json';
-import minersByWallet from './minersByWallet.json';
-
 const rarityKey = [
   '',
   'oneStar',
@@ -11,7 +8,11 @@ const rarityKey = [
   'sixStars',
 ];
 
-const dataGenerator = () => {
+const dataGenerator = async (date = '08-02-22') => {
+  const dataResult = await fetch(`https://raw.githubusercontent.com/akamuraasai/ELEFAnalytics/master/data/data-${date}.json`);
+  const minersResult = await fetch(`https://raw.githubusercontent.com/akamuraasai/ELEFAnalytics/master/data/minersByWallet-${date}.json`);
+  const data = await dataResult.json();
+  const minersByWallet = await minersResult.json();
   const numberOfPlayers = Object.keys(minersByWallet).length;
   const numberOfNFTs = data.length;
 

@@ -52,6 +52,11 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const dates = [
+  '08-02-22',
+  '09-02-22',
+];
+
 function App() {
   const [data, setData] = useState({});
   const [nftQuantity, setNFTQuantity] = useState([]);
@@ -59,70 +64,91 @@ function App() {
   const [fiveStars, setFiveStars] = useState([]);
   const [fourStars, setFourStars] = useState([]);
   const [chartData, setChartData] = useState([]);
+  const [date, setDate] = useState(0);
+
+  const changeDate = (value) => () => {
+    const newValue = date + value;
+
+    if (newValue < 0 || newValue > dates.length - 1) {
+      return;
+    }
+
+    setDate(newValue);
+  };
 
   useEffect(() => {
-    const newData = dataGenerator();
-    setData(newData);
-    setNFTQuantity(
-      newData.sortedByWalletNFTQuantity
-        .slice(0, 50)
-        .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.miners.length }))
-    );
-    setLFQuantity(
-      newData.sortedByMinedQuantity
-        .slice(0, 50)
-        .map((item, index) => ({ id: index + 1, wallet: item.wallet, totalMined: item.totalMined }))
-    );
+    (async () => {
+      const newData = await dataGenerator(dates[date]);
 
-    setFiveStars(
-      newData.sortedByNFTRarityQuantity
-        .slice(0, 10)
-        .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.fiveStar }))
-    );
-    setFourStars(
-      newData.sortedByNFTRarityQuantity
-        .sort((a, b) => b.fourStar - a.fourStar)
-        .slice(0, 10)
-        .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.fourStar }))
-    );
+      setData(newData);
 
-    setChartData([
-      {
-        name: 'Beginer (1*)',
-        total: newData?.totalNFTByRarity?.oneStar || 0,
-        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.oneStar / newData.numberOfNFTs) * 100).toFixed(2)),
-        'Porcentagem de Mint Esperada': 51
-      },
-      {
-        name: 'Intermediate (2*)',
-        total: newData?.totalNFTByRarity?.twoStars || 0,
-        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.twoStars / newData.numberOfNFTs) * 100).toFixed(2)),
-        'Porcentagem de Mint Esperada': 30
-      },
-      {
-        name: 'Advanced (3*)',
-        total: newData?.totalNFTByRarity?.threeStars || 0,
-        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.threeStars / newData.numberOfNFTs) * 100).toFixed(2)),
-        'Porcentagem de Mint Esperada': 15
-      },
-      {
-        name: 'Rare (4*)',
-        total: newData?.totalNFTByRarity?.fourStars || 0,
-        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.fourStars / newData.numberOfNFTs) * 100).toFixed(2)),
-        'Porcentagem de Mint Esperada': 3
-      },
-      {
-        name: 'Legendary (5*)',
-        total: newData?.totalNFTByRarity?.fiveStars || 0,
-        'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.fiveStars / newData.numberOfNFTs) * 100).toFixed(2)),
-        'Porcentagem de Mint Esperada': 1
-      },
-    ])
-  }, []);
+      setNFTQuantity(
+        newData.sortedByWalletNFTQuantity
+          .slice(0, 50)
+          .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.miners.length }))
+      );
+
+      setLFQuantity(
+        newData.sortedByMinedQuantity
+          .slice(0, 50)
+          .map((item, index) => ({ id: index + 1, wallet: item.wallet, totalMined: item.totalMined }))
+      );
+
+      setFiveStars(
+        newData.sortedByNFTRarityQuantity
+          .slice(0, 10)
+          .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.fiveStar }))
+      );
+      setFourStars(
+        newData.sortedByNFTRarityQuantity
+          .sort((a, b) => b.fourStar - a.fourStar)
+          .slice(0, 10)
+          .map((item, index) => ({ id: index + 1, wallet: item.wallet, miners: item.fourStar }))
+      );
+
+      setChartData([
+        {
+          name: 'Beginer (1*)',
+          total: newData?.totalNFTByRarity?.oneStar || 0,
+          'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.oneStar / newData.numberOfNFTs) * 100).toFixed(2)),
+          'Porcentagem de Mint Esperada': 51
+        },
+        {
+          name: 'Intermediate (2*)',
+          total: newData?.totalNFTByRarity?.twoStars || 0,
+          'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.twoStars / newData.numberOfNFTs) * 100).toFixed(2)),
+          'Porcentagem de Mint Esperada': 30
+        },
+        {
+          name: 'Advanced (3*)',
+          total: newData?.totalNFTByRarity?.threeStars || 0,
+          'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.threeStars / newData.numberOfNFTs) * 100).toFixed(2)),
+          'Porcentagem de Mint Esperada': 15
+        },
+        {
+          name: 'Rare (4*)',
+          total: newData?.totalNFTByRarity?.fourStars || 0,
+          'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.fourStars / newData.numberOfNFTs) * 100).toFixed(2)),
+          'Porcentagem de Mint Esperada': 3
+        },
+        {
+          name: 'Legendary (5*)',
+          total: newData?.totalNFTByRarity?.fiveStars || 0,
+          'Porcentagem de Mint Real': parseFloat(((newData?.totalNFTByRarity?.fiveStars / newData.numberOfNFTs) * 100).toFixed(2)),
+          'Porcentagem de Mint Esperada': 1
+        },
+      ]);
+    })();
+  }, [date]);
 
   return (
     <div style={{ width: '100%', height: '100%', flex: 1, display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: 40 }}>
       <h1>ELEF Dashboard</h1>
+
+      <div className="buttons bottom-margin">
+        <div className="button right-margin" onClick={changeDate(-1)}>Anterior</div>
+        <div className="button" onClick={changeDate(1)}>Próximo</div>
+      </div>
 
       <div className="cards">
         <Card title="Número de Jogadores" value={data.numberOfPlayers?.toLocaleString('pt')} />
