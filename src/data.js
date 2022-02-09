@@ -89,4 +89,4 @@ const dataGenerator = () => {
   };
 };
 
-export default dataGenerator();
+export default dataGenerator;
