@@ -179,6 +179,17 @@ body {
     background-color: #3b3e46;
 }
 
+.padding {
+    padding: 16px;
+}
+
+.center {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    width: 100px;
+}
+
 @media only screen and (max-width: 540px) {
     .cards {
         flex-wrap: wrap;

@@ -65,6 +65,7 @@ function App() {
   const [fourStars, setFourStars] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [date, setDate] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const changeDate = (value) => () => {
     const newValue = date + value;
@@ -78,6 +79,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       const newData = await dataGenerator(dates[date]);
 
       setData(newData);
@@ -138,6 +140,7 @@ function App() {
           'Porcentagem de Mint Esperada': 1
         },
       ]);
+      setLoading(false);
     })();
   }, [date]);
 
@@ -146,8 +149,9 @@ function App() {
       <h1>ELEF Dashboard</h1>
 
       <div className="buttons bottom-margin">
-        <div className="button right-margin" onClick={changeDate(-1)}>Anterior</div>
-        <div className="button" onClick={changeDate(1)}>Próximo</div>
+        <div className="button right-margin bold" onClick={changeDate(-1)}>Anterior</div>
+        <div className="right-margin bold padding center">{loading ? 'Carregando...' : dates[date]}</div>
+        <div className="button bold" onClick={changeDate(1)}>Próximo</div>
       </div>
 
       <div className="cards">
