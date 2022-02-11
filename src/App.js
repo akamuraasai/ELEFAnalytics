@@ -55,6 +55,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 const dates = [
   '08-02-22',
   '09-02-22',
+  '10-02-22',
 ];
 
 function App() {
